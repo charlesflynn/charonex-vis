@@ -1,0 +1,112 @@
+    <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css">
+    <link type="text/css" rel="stylesheet" href="css/rickshaw.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.min.js"></script>
+    <script>window.jQuery.ui || document.write('<script src="js/vendor/jquery-ui.min.js"><\/script>')</script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/rickshaw/1.2.1/rickshaw.min.js"></script>
+    <script>window.Rickshaw || document.write('<script src="js/vendor/rickshaw.min.js"><\/script>')</script>
+
+    <style>
+        .rickshaw_graph .detail {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .rickshaw_graph .detail .x_label {
+            display: none
+        }
+        .rickshaw_graph .detail .item {
+            border: 0;
+            right: 1.1em;
+        }
+        .rickshaw_graph .detail .item:before {
+            content: "\25b8";
+            position: absolute;
+            left: auto;
+            right: 0;
+            color: rgba(0, 0, 0, 0.7);
+            width: 0;
+        }
+        .rickshaw_graph .x_tick {
+            top: auto;
+            bottom: 1px;
+            height: 50px;
+            border-left: 2px dotted rgba(255, 255, 255, 0.2);
+        }
+        .rickshaw_graph .x_grid_d3 .tick {
+            stroke: rgba(255, 255, 255, 0.20);
+        }
+        .rickshaw_graph .x_tick.glow .title,
+        .rickshaw_graph .y_ticks.glow text {
+            fill: white;
+            color: white;
+            text-shadow: none;
+        }
+        .rickshaw_graph .x_tick.inverse .title,
+        .rickshaw_graph .y_ticks.inverse text {
+            text-shadow: none;
+        }
+    </style>
+
+
+<script>
+
+var height = window.innerHeight * 0.4,
+    width = window.innerWidth - 55;
+
+var data = [ { x: 978220800, y: 531.3 }, { x: 1009756800, y: 581.3 }, { x: 1041292800, y: 626.3 }, { x: 1072828800, y: 662.5 }, { x: 1104451200, y: 697.6 }, { x: 1135987200, y: 724 }, { x: 1167523200, y: 749.6 }, { x: 1199059200, y: 760.1 }, { x: 1230681600, y: 816.1 }, { x: 1262217600, y: 863.7 }, { x: 1293753600, y: 918.7 }, { x: 1325289600, y: 1001.5 }, { x: 1356912000, y: 1090.9 },
+ ];
+
+var graph = new Rickshaw.Graph( {
+    element: document.getElementById("chart"),
+    width: width,
+    height: height,
+    renderer: 'area',
+    stroke: true,
+    preserve: true,
+    series: [
+        {
+            color: '#6baed6',
+            data: data,
+            name: 'Currency Component of M1'
+        }
+    ]
+} );
+
+graph.render();
+
+var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+    graph: graph,
+    formatter: function(series, x, y) {
+        var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
+        var content = series.name + ": " + parseInt(y) + '<br>' + date;
+        return content;
+    }
+} );
+
+var ticksTreatment = 'glow';
+
+var xAxis = new Rickshaw.Graph.Axis.Time( {
+    graph: graph,
+    ticksTreatment: ticksTreatment
+} );
+
+xAxis.render();
+
+var svg = d3.select('svg');
+svg.append("text")
+    .attr("x", (width / 2))
+    .attr("y", (height / 2))
+    .attr("text-anchor", "middle")
+    .attr("font-size", "22px")
+    .attr("fill", "#E6E6E6")
+    .text("Will you be ready");
+
+svg.append("text")
+    .attr("x", (width / 2))
+    .attr("y", (height / 2 + 30))
+    .attr("text-anchor", "middle")
+    .attr("font-size", "22px")
+    .attr("fill", "#E6E6E6")
+    .text("for the future?");
+
+</script>
